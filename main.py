@@ -1,8 +1,12 @@
 import json
 import re
+
 import torch
 from quixstreams import Application
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+from crud import create_message
+from message import Message
 
 MODEL_NAME = "RUSpam/spamNS_v1"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -63,12 +67,15 @@ def main():
             text = value["text"]
 
             is_spam, score = classify_message(text)
-            print(f"Сообщение: {text}")
-            print(
-                f"Результат: {'СПАМ' if is_spam else 'НЕ СПАМ'} "
-                f"(рейтинг спама: {score:.4f})"
-            )
-            print("-" * 50)
+            if is_spam:
+                message = Message(
+                    spam_score=score,
+                    **value,
+                )
+                create_message(message)
+                print(f"Message is spam: {text} (score: {score})")
+            else:
+                print(f"Message is not spam: {text} (score: {score})")
 
 
 if __name__ == "__main__":
