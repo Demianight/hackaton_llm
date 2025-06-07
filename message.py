@@ -3,7 +3,7 @@ from sqlmodel import Field, SQLModel
 
 class Message(SQLModel, table=True):
     message_id: int = Field(primary_key=True)
-    date: float
+    date: int
     chat_id: int | None = None
     chat_type: str | None = None
     user_id: int | None = None
