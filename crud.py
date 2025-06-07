@@ -6,6 +6,7 @@ from message import Message
 
 def create_message(message: Message) -> Message:
     with Session(engine) as session:
+        print(message)
         session.add(message)
         session.commit()
         session.refresh(message)
