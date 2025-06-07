@@ -2,7 +2,7 @@ from sqlmodel import Field, SQLModel, Column, BigInteger
 
 
 class Message(SQLModel, table=True):
-    message_id: int = Field(primary_key=True)
+    message_id: int = Field(sa_column=Column(BigInteger(), primary_key=True))
 
     chat_id: int | None = Field(sa_column=Column(BigInteger()))
     user_id: int | None = Field(sa_column=Column(BigInteger()))
