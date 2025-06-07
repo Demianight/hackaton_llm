@@ -1,10 +1,10 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Column, BigInteger
 
 
 class Message(SQLModel, table=True):
     message_id: int = Field(primary_key=True)
     date: int
-    chat_id: int | None = None
+    chat_id: int | None = Field(sa_column=Column(BigInteger()))
     chat_type: str | None = None
     user_id: int | None = None
     user_username: str | None = None
