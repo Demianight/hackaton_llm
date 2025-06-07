@@ -2,7 +2,6 @@ from sqlmodel import Field, SQLModel
 
 
 class Message(SQLModel, table=True):
-    __tablename__ = "message"
     message_id: int = Field(primary_key=True)
     date: int
     chat_id: int | None = None
