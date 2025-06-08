@@ -15,12 +15,11 @@ RUN pip install --no-cache-dir uv
 # Copy project files
 COPY pyproject.toml uv.lock ./
 
-# Set environment variables for PyTorch
-ENV TORCH_CUDA_VERSION=cu118
-ENV TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
+# Install PyTorch first
+RUN pip install torch==2.6.0
 
-# Install dependencies using uv with specific platform
-RUN uv pip install --system --platform manylinux_2_28_x86_64 -e .
+# Install other dependencies using uv
+RUN uv pip install --system -e .
 
 # Copy the rest of the application
 COPY . .

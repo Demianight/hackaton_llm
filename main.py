@@ -73,12 +73,14 @@ def main():
             if ("http://" or "https://") in text:
                 score += 0.352
             if is_spam:
+                if score > 1:
+                    score = 1
                 message = Message(
                     spam_score=score,
                     **value,
                 )
                 create_message(message)  # сохраняем в бд
-                if score >= 0.85:  # если прям спам спам, то пушим на удаление
+                if score >= 0.7:  # если прям спам спам, то пушим на удаление
                     with app.get_producer() as producer:
                         producer.produce(
                             topic="spam_messages",
