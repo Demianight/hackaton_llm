@@ -52,7 +52,6 @@ def main():
         loglevel="INFO",
         consumer_group="llm",
     )
-
     with app.get_consumer() as consumer:
         consumer.subscribe(["raw_messages"])
 
@@ -72,7 +71,13 @@ def main():
                     spam_score=score,
                     **value,
                 )
-                create_message(message)
+                create_message(message)  # сохраняем в бд
+                if score >= 0.95:  # если прям спам спам, то пушим на удаление
+                    with app.get_producer() as producer:
+                        producer.produce(
+                            topic="spam_messages",
+                            value=msg.value(),
+                        )
                 print(f"Message is spam: {text} (score: {score})")
             else:
                 print(f"Message is not spam: {text} (score: {score})")
