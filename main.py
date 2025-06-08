@@ -20,6 +20,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 from sqlmodel import SQLModel
 
 from db import engine
+
 SQLModel.metadata.create_all(engine)
 
 
@@ -76,7 +77,7 @@ def main():
                     **value,
                 )
                 create_message(message)  # сохраняем в бд
-                if score >= 0.95:  # если прям спам спам, то пушим на удаление
+                if score >= 0.85:  # если прям спам спам, то пушим на удаление
                     with app.get_producer() as producer:
                         producer.produce(
                             topic="spam_messages",
