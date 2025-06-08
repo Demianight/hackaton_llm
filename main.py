@@ -70,7 +70,7 @@ def main():
             text = value["text"]
 
             is_spam, score = classify_message(text)
-            if r"http\S+" in text:
+            if ("http://" or "https://") in text:
                 score += 0.352
             if is_spam:
                 message = Message(
