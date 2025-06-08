@@ -14,7 +14,8 @@ MODEL_NAME = "RUSpam/spamNS_v1"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = (
-    AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=1)
+    AutoModelForSequenceClassification.from_pretrained(
+        MODEL_NAME, num_labels=1)
     .to(DEVICE)
     .eval()
 )
@@ -24,7 +25,6 @@ SQLModel.metadata.create_all(engine)
 
 
 def clean_text(text):
-    text = re.sub(r"http\S+", "", text)
     text = re.sub(r"[^А-Яа-я0-9 ]+", " ", text)
     text = text.lower().strip()
     return text
@@ -70,6 +70,8 @@ def main():
             text = value["text"]
 
             is_spam, score = classify_message(text)
+            if r"http\S+" in text:
+                score += 0.352
             if is_spam:
                 message = Message(
                     spam_score=score,
