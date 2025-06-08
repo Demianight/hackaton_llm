@@ -80,7 +80,7 @@ def main():
                     **value,
                 )
                 create_message(message)  # сохраняем в бд
-                if score >= 0.7:  # если прям спам спам, то пушим на удаление
+                if score >= 0.81:  # если прям спам спам, то пушим на удаление
                     with app.get_producer() as producer:
                         producer.produce(
                             topic="spam_messages",
