@@ -3,9 +3,11 @@ import re
 
 import torch
 from quixstreams import Application
+from sqlmodel import SQLModel
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from crud import create_message
+from db import engine
 from message import Message
 
 MODEL_NAME = "RUSpam/spamNS_v1"
@@ -17,16 +19,12 @@ model = (
     .eval()
 )
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-from sqlmodel import SQLModel
-
-from db import engine
 
 SQLModel.metadata.create_all(engine)
 
 
 def clean_text(text):
-    text = re.sub(r"http\S+", "", text)
-    text = re.sub(r"[^А-Яа-я0-9 ]+", " ", text)
+    text = re.sub(r"[^A-Za-zА-Яа-я0-9 :/.?&=_\-]+", " ", text)
     text = text.lower().strip()
     return text
 
@@ -67,7 +65,7 @@ def main():
             elif msg.error() is not None:
                 raise Exception(msg.error())
 
-            value = json.loads(msg.value())
+            value = json.loads(msg.value())  # noqa
             text = value["text"]
 
             is_spam, score = classify_message(text)
