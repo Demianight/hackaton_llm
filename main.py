@@ -24,7 +24,8 @@ SQLModel.metadata.create_all(engine)
 
 
 def clean_text(text):
-    text = re.sub(r"[^A-Za-zА-Яа-я0-9 :/.?&=_\-]+", " ", text)
+    text = re.sub(r"http\S+", "", text)
+    text = re.sub(r"[^А-Яа-я0-9 ]+", " ", text)
     text = text.lower().strip()
     return text
 
