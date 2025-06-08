@@ -5,6 +5,7 @@ from message import Message
 
 
 def create_message(message: Message) -> Message:
+    message.is_proccesed = False
     with Session(engine) as session:
         session.add(message)
         session.commit()

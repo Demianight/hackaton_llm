@@ -17,6 +17,10 @@ model = (
     .eval()
 )
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+from sqlmodel import SQLModel
+
+from db import engine
+SQLModel.metadata.create_all(engine)
 
 
 def clean_text(text):
