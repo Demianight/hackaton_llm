@@ -1,0 +1,13 @@
+# Rebuilding whole image each time fucking sucks, so I made a base image))
+# Please, do not forget to rebuild it when you change pyproject.toml
+FROM python:3.12-slim-bookworm AS base
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+
+COPY pyproject.toml .
+COPY uv.lock .
+RUN uv sync --frozen --no-cache
+
+COPY scripts/download_model.py ./download_model.py
+RUN uv run download_model.py

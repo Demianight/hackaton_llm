@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-consumer
+  labels:
+    app: llm-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-consumer
+  template:
+    metadata:
+      labels:
+        app: llm-consumer
+    spec:
+      containers:
+      - name: llm
+        image: demianight/anti_spam_llm:latest
+        imagePullPolicy: Always
+        env:
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: ENABLE_AUTO_DELETE
+          value: "True"
+        - name: ENABLE_API
+          value: "True"
+        - name: BASE_API_URL
+          value: "http://backend:8000"
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
